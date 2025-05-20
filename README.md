@@ -100,9 +100,12 @@ jira-mcp --transport sse
 jira-extract ERP-161 example.png --output saved_file.png
 
 # 下载问题的所有附件
-jira-download ERP-161
+jira-attachments ERP-161
 
-# 列出问题的所有附件
+# 仅列出问题的所有附件，不下载
+jira-attachments ERP-161 --list-only
+
+# 输出附件信息到JSON文件
 jira-attachments ERP-161 --output attachments.json
 ```
 

@@ -71,3 +71,6 @@ dmypy.json
 
 # Project specific
 jira_mcp.log 
+
+# ide files
+.cursor

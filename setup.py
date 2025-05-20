@@ -22,8 +22,7 @@ setup(
         "console_scripts": [
             "jira-mcp=src.server:main",
             "jira-extract=src.scripts.extract_attachment:main",
-            "jira-download=src.scripts.download_all_attachments:main",
-            "jira-attachments=src.scripts.get_issue_attachments:main",
+            "jira-attachments=src.scripts.download_all_attachments:main",
         ],
     },
     python_requires=">=3.10,<3.11",

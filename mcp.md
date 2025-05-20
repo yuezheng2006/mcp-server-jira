@@ -28,10 +28,10 @@ export JIRA_PASSWORD=your-password  # 或使用JIRA_API_TOKEN
 
 ```bash
 # 使用stdio传输模式
-uvx --with-editable . jira-mcp --transport stdio
+jira-mcp --transport stdio
 
 # 使用sse传输模式
-uvx --with-editable . jira-mcp --transport sse
+jira-mcp --transport sse
 ```
 
 ## 工具使用示例
@@ -39,7 +39,7 @@ uvx --with-editable . jira-mcp --transport sse
 ### 查询问题详情
 
 ```python
-from jira_mcp.server import get_issue
+from src.server import get_issue
 
 # 获取问题详情
 issue = get_issue("PROJECT-123")
@@ -49,7 +49,7 @@ print(issue["summary"])
 ### 获取问题附件
 
 ```python
-from jira_mcp.server import get_attachment_by_filename
+from src.server import get_attachment_by_filename
 import base64
 
 # 获取附件
@@ -62,11 +62,20 @@ if "error" not in result:
         f.write(content)
 ```
 
-### 使用命令行工具下载附件
+### 使用命令行工具管理附件
 
 ```bash
-# 使用extract_attachment.py脚本下载附件
-python extract_attachment.py PROJECT-123 filename.png --output saved_file.png
+# 下载单个附件
+jira-extract ERP-161 filename.png --output saved_file.png
+
+# 下载问题的所有附件
+jira-attachments ERP-161
+
+# 仅列出问题的附件而不下载
+jira-attachments ERP-161 --list-only
+
+# 将附件信息保存到JSON文件
+jira-attachments ERP-161 --output attachments.json
 ```
 
 ## 附件管理
@@ -76,8 +85,8 @@ JIRA MCP工具会自动将下载的附件保存到`~/.jira_mcp/`目录中，并�
 ### 下载单个附件
 
 ```bash
-# 使用extract_attachment.py脚本下载附件
-python extract_attachment.py ERP-161 image-2025-05-12-14-57-30-239.png
+# 下载单个附件
+jira-extract ERP-161 image-2025-05-12-14-57-30-239.png
 ```
 
 这会将附件自动保存到`~/.jira_mcp/ERP-161/`目录，并返回附件的相关信息。
@@ -86,20 +95,24 @@ python extract_attachment.py ERP-161 image-2025-05-12-14-57-30-239.png
 
 ```bash
 # 下载问题的所有附件
-python download_all_attachments.py ERP-161
+jira-attachments ERP-161
 
 # 仅列出问题的附件而不下载
-python download_all_attachments.py ERP-161 --list-only
+jira-attachments ERP-161 --list-only
 ```
 
 ### 在代码中使用
 
 ```python
-from jira_mcp.server import get_attachment_by_filename, download_all_attachments
+from src.server import get_attachment_by_filename, download_all_attachments, get_issue_attachments
 
 # 获取并保存单个附件
 result = get_attachment_by_filename("ERP-161", "image.png")
 print(f"附件已保存到: {result['local_path']}")
+
+# 获取问题的所有附件信息
+result = get_issue_attachments("ERP-161")
+print(f"问题共有 {result['total']} 个附件")
 
 # 下载问题的所有附件
 result = download_all_attachments("ERP-161")
@@ -113,7 +126,7 @@ print(f"附件已保存到目录: {result['download_dir']}")
    确保问题ID和附件名称正确。可以使用`debug_issue_fields`函数查看问题的所有字段，包括附件信息：
    
    ```python
-   from jira_mcp.server import debug_issue_fields
+   from src.server import debug_issue_fields
    
    fields = debug_issue_fields("PROJECT-123")
    # 查看附件字段
@@ -135,9 +148,9 @@ print(f"附件已保存到目录: {result['download_dir']}")
 
 根据JQL查询JIRA问题列表。
 
-### `get_attachment_by_filename(issue_key, filename)`
+### `get_attachment_by_filename(issue_key, filename, save_to_disk=True)`
 
-根据问题ID和文件名获取附件内容，返回base64编码的内容和元数据。
+根据问题ID和文件名获取附件内容，返回base64编码的内容和元数据。当`save_to_disk=True`时，会自动保存附件到本地。
 
 ### `get_issue_attachments(issue_key, download=False)`
 
