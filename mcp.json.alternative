@@ -1,13 +1,11 @@
 {
   "mcpServers": {
     "jira-mcp": {
-      "command": "uvx",
+      "command": "bash",
       "args": [
-        "--from",
-        "git+https://github.com/yuezheng2006/mcp-server-jira.git",
-        "jira-mcp"
+        "-c",
+        "uv pip install -q git+https://github.com/yuezheng2006/mcp-server-jira.git && jira-mcp --transport stdio"
       ],
-      "transportType": "stdio",
       "env": {
         "JIRA_SERVER_URL": "http://your-jira-instance.com",
         "JIRA_USERNAME": "your_username",
