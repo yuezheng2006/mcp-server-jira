@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jira_mcp"
+version = "0.1.0"
+description = "JIRA MCP for querying JIRA details and lists"
+authors = [
+    {name = "Your Name", email = "your-email@example.com"},
+]
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+license = {text = "MIT"}
+keywords = ["jira", "mcp", "cursor", "fastmcp"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "jira>=3.8.0",
+    "mcp>=1.9.0",
+    "pydantic>=2.11.0",
+    "python-dotenv>=1.1.0",
+    "uvicorn>=0.34.0",
+    "fastapi>=0.110.0",
+    "requests>=2.32.0",
+    "typing-extensions>=4.13.0",
+]
+
+[project.scripts]
+jira-mcp = "jira_mcp.server:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "isort>=5.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/你的用户名/jira_mcp"
+"Bug Tracker" = "https://github.com/你的用户名/jira_mcp/issues"
+"Documentation" = "https://github.com/你的用户名/jira_mcp#readme"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/jira_mcp"]
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.uv]
+python-preference = "3.10.16" 

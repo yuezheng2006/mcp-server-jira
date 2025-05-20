@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "jira-mcp": {
+      "command": "uvx",
+      "args": [
+        "--with-editable",
+        ".",
+        "jira-mcp",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "JIRA_SERVER_URL": "http://jira.frp.ktvsky.com",
+        "JIRA_USERNAME": "yangyuezheng",
+        "JIRA_PASSWORD": "Yyz123456@"
+      }
+    }
+  }
+} 
