@@ -23,7 +23,7 @@
 
 ```bash
 # 使用 uv (推荐)
-uvx install git+https://github.com/yuezheng2006/mcp-server-jira.git
+uv pip install git+https://github.com/yuezheng2006/mcp-server-jira.git
 
 # 或使用 pip
 pip install git+https://github.com/yuezheng2006/mcp-server-jira.git
@@ -65,11 +65,31 @@ JIRA_API_TOKEN=your_api_token
     "jira-mcp": {
       "command": "uvx",
       "args": [
-        "install",
+        "--from",
         "git+https://github.com/yuezheng2006/mcp-server-jira.git",
-        "jira-mcp",
-        "--transport",
-        "stdio"
+        "jira-mcp"
+      ],
+      "transportType": "stdio",
+      "env": {
+        "JIRA_SERVER_URL": "http://your-jira-instance.com",
+        "JIRA_USERNAME": "your_username",
+        "JIRA_PASSWORD": "your_password"
+      }
+    }
+  }
+}
+```
+
+或者使用bash脚本方式（替代方案）：
+
+```json
+{
+  "mcpServers": {
+    "jira-mcp": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "uv pip install -q git+https://github.com/yuezheng2006/mcp-server-jira.git && jira-mcp --transport stdio"
       ],
       "env": {
         "JIRA_SERVER_URL": "http://your-jira-instance.com",

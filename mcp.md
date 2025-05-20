@@ -22,9 +22,34 @@ export JIRA_USERNAME=your-username
 export JIRA_PASSWORD=your-password  # 或使用JIRA_API_TOKEN
 ```
 
+### 在Cursor中配置
+
+在 `.cursor/mcp.json` 中添加以下配置：
+
+```json
+{
+  "mcpServers": {
+    "jira-mcp": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/yuezheng2006/mcp-server-jira.git",
+        "jira-mcp"
+      ],
+      "transportType": "stdio",
+      "env": {
+        "JIRA_SERVER_URL": "http://your-jira-instance.com",
+        "JIRA_USERNAME": "your_username",
+        "JIRA_PASSWORD": "your_password"
+      }
+    }
+  }
+}
+```
+
 ### 启动服务
 
-启动MCP服务器:
+如果需要独立启动MCP服务器:
 
 ```bash
 # 使用stdio传输模式
@@ -137,6 +162,10 @@ print(f"附件已保存到目录: {result['download_dir']}")
 2. **JIRA连接问题**
    
    检查环境变量是否正确设置，以及JIRA服务器是否可访问。
+
+3. **Cursor中的MCP配置问题**
+
+   如果在Cursor中使用遇到问题，请检查`.cursor/mcp.json`文件配置是否正确。特别注意`uvx`命令的格式，应使用`--from`参数而不是`install`。
 
 ## API参考
 
