@@ -74,3 +74,4 @@ jira_mcp.log
 
 # ide files
 .cursor
+.DS_Store
