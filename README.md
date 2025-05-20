@@ -1,14 +1,16 @@
-# JIRA MCP
+# 基于MCP的JIRA集成插件
 
-一个基于FastMCP框架的JIRA集成插件，用于查询JIRA问题详情、列表及进行基本操作。
+一个基于FastMCP框架的JIRA集成插件，用于查询JIRA问题详情、列表及进行基本操作，支持JIRA附件管理。
 
-## 功能
+## 主要功能
 
-- 查询JIRA问题详情
-- 搜索JIRA问题列表
-- 创建新的JIRA问题
-- 更新现有JIRA问题
+- 查询JIRA问题详情和问题列表
+- 创建和更新JIRA问题
 - 获取项目列表和详情
+- 管理和下载JIRA问题附件
+  - 自动将附件保存到~/.jira_mcp目录
+  - 按问题ID组织的子目录结构
+  - 支持下载单个或所有附件
 
 ## 安装
 
@@ -17,22 +19,22 @@
 - Python 3.10 或更高版本
 - 安装 uv (推荐) 或 pip
 
-### 方法一：从GitHub安装
+### 从GitHub安装
 
 ```bash
 # 使用 uv (推荐)
-uvx install git+https://github.com/你的用户名/jira_mcp.git
+uvx install git+https://github.com/yuezheng2006/mcp-server-jira.git
 
 # 或使用 pip
-pip install git+https://github.com/你的用户名/jira_mcp.git
+pip install git+https://github.com/yuezheng2006/mcp-server-jira.git
 ```
 
-### 方法二：本地开发安装
+### 本地开发安装
 
 ```bash
 # 克隆仓库
-git clone https://github.com/你的用户名/jira_mcp.git
-cd jira_mcp
+git clone https://github.com/yuezheng2006/mcp-server-jira.git
+cd mcp-server-jira
 
 # 使用 uv 安装依赖并开发模式安装
 uv pip install -e .
@@ -43,9 +45,7 @@ pip install -e .
 
 ## 配置
 
-### 环境变量
-
-JIRA MCP 需要以下环境变量：
+创建一个`.env`文件，设置以下环境变量：
 
 ```
 JIRA_SERVER_URL=http://your-jira-instance.com
@@ -65,10 +65,12 @@ JIRA_API_TOKEN=your_api_token
     "jira-mcp": {
       "command": "uvx",
       "args": [
-        "-m",
-        "jira_mcp.server"
+        "install",
+        "git+https://github.com/yuezheng2006/mcp-server-jira.git",
+        "jira-mcp",
+        "--transport",
+        "stdio"
       ],
-      "transportType": "stdio",
       "env": {
         "JIRA_SERVER_URL": "http://your-jira-instance.com",
         "JIRA_USERNAME": "your_username",
@@ -79,27 +81,50 @@ JIRA_API_TOKEN=your_api_token
 }
 ```
 
-## 使用方法
+## 快速开始
 
-安装并配置好后，在Cursor中可以使用以下格式的命令：
+### 启动MCP服务器
 
-### 获取问题详情
+```bash
+# 使用stdio传输模式
+jira-mcp --transport stdio
 
-```
-查看JIRA问题PROJ-123的详情
-```
-
-### 搜索问题
-
-```
-搜索所有状态为"进行中"的JIRA问题
+# 使用sse传输模式
+jira-mcp --transport sse
 ```
 
-### 创建问题
+### 命令行工具
+
+```bash
+# 下载单个附件
+jira-extract ERP-161 example.png --output saved_file.png
+
+# 下载问题的所有附件
+jira-download ERP-161
+
+# 列出问题的所有附件
+jira-attachments ERP-161 --output attachments.json
+```
+
+### 在Cursor中使用
+
+配置好mcp.json后，可以在Cursor中使用以下自然语言命令：
 
 ```
-在JIRA项目PROJ中创建一个标题为"修复登录BUG"的任务
+查看JIRA问题ERP-161的详情
 ```
+
+```
+下载JIRA问题ERP-161的所有附件
+```
+
+```
+搜索所有处于"进行中"状态的JIRA问题
+```
+
+## 详细文档
+
+更详细的使用指南和API参考，请查看[使用指南](./mcp.md)。
 
 ## 开发
 
@@ -112,17 +137,6 @@ uv pip install -e ".[dev]"
 # 或使用 pip
 pip install -e ".[dev]"
 ```
-
-### 代码格式化
-
-```bash
-black src
-isort src
-```
-
-## 贡献
-
-欢迎提交Pull Requests和Issues！
 
 ## 许可证
 

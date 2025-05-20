@@ -3,16 +3,16 @@
     "jira-mcp": {
       "command": "uvx",
       "args": [
-        "--with-editable",
-        ".",
+        "install",
+        "git+https://github.com/yuezheng2006/mcp-server-jira.git",
         "jira-mcp",
         "--transport",
         "stdio"
       ],
       "env": {
-        "JIRA_SERVER_URL": "http://jira.frp.ktvsky.com",
-        "JIRA_USERNAME": "yangyuezheng",
-        "JIRA_PASSWORD": "Yyz123456@"
+        "JIRA_SERVER_URL": "http://your-jira-instance.com",
+        "JIRA_USERNAME": "your_username",
+        "JIRA_PASSWORD": "your_password"
       }
     }
   }
